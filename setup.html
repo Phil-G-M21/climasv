@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Setup Guide, CLIMAS</title>
+<link rel="stylesheet" href="styles.css" />
+<style>
+/* ─── SETUP PAGE ─────────────────── */
+.setup-hero{max-width:1400px;margin:0 auto;padding:80px 32px 64px;text-align:center}
+.eyebrow-line{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--clay);margin-bottom:20px;display:inline-flex;align-items:center;gap:12px}
+.eyebrow-line::before,.eyebrow-line::after{content:'';display:inline-block;width:28px;height:1px;background:var(--clay);opacity:.4}
+.setup-hero h1{font-family:'Fraunces',serif;font-weight:500;font-size:clamp(44px,5vw,72px);line-height:1.0;letter-spacing:-0.03em;margin-bottom:24px}
+.setup-hero h1 em{font-style:italic;color:var(--forest);font-weight:400}
+.hero-lede{font-size:18px;color:var(--ink-soft);max-width:560px;margin:0 auto 44px;line-height:1.65}
+.stats-row{display:inline-flex;border:1px solid var(--line);border-radius:6px;overflow:hidden}
+.stat-b{padding:18px 32px;text-align:center;border-right:1px solid var(--line)}
+.stat-b:last-child{border-right:none}
+.stat-v{font-family:'Fraunces',serif;font-size:30px;font-weight:500;letter-spacing:-0.02em;display:block}
+.stat-l{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-mute);margin-top:4px;display:block}
+
+/* Steps */
+.steps-wrap{max-width:1400px;margin:0 auto;padding:0 32px 100px}
+.step-card{display:grid;grid-template-columns:72px 1fr 340px;gap:0 48px;padding:52px 0;border-top:1px solid var(--line);align-items:start}
+.step-card:last-child{border-bottom:1px solid var(--line)}
+.step-left{display:flex;flex-direction:column;align-items:center;gap:14px;padding-top:4px}
+.step-circle{width:48px;height:48px;border-radius:50%;background:var(--paper);border:2px solid var(--line);display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-size:20px;font-weight:500;color:var(--ink-mute);flex-shrink:0;transition:all .25s}
+.step-card:hover .step-circle{background:var(--forest);border-color:var(--forest);color:var(--paper)}
+.step-tag-v{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-mute);writing-mode:vertical-lr;transform:rotate(180deg)}
+.step-mid{padding-top:4px}
+.step-kicker{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--clay);margin-bottom:10px}
+.step-h{font-family:'Fraunces',serif;font-weight:500;font-size:clamp(22px,2.4vw,30px);line-height:1.1;letter-spacing:-0.02em;margin-bottom:16px}
+.step-h em{font-style:italic;color:var(--forest)}
+.step-p{font-size:15px;color:var(--ink-soft);line-height:1.7;max-width:540px}
+.step-p+.step-p{margin-top:12px}
+.tok{font-family:'JetBrains Mono',monospace;font-size:12px;background:var(--paper-soft);border:1px solid var(--line);border-radius:4px;padding:2px 8px;color:var(--ink)}
+.tok.g{background:rgba(42,122,60,.07);border-color:rgba(42,122,60,.25);color:var(--safe)}
+.step-right{padding-top:4px}
+
+/* OLED mockup */
+.oled{background:#0d0d0d;border-radius:6px;padding:3px;border:2px solid #1a1a1a;box-shadow:0 8px 28px rgba(0,0,0,.3)}
+.oled-s{background:#000;border-radius:3px;padding:14px 16px;font-family:'JetBrains Mono',monospace;font-size:11px}
+.oled-hd{background:#e8e8e8;color:#000;padding:3px 8px;text-align:center;font-size:10px;letter-spacing:.1em;margin-bottom:10px;border-radius:2px;font-weight:700}
+.oled-r{display:flex;justify-content:space-between;color:#666;font-size:10px;margin-bottom:3px}
+.oled-r .gv{color:#39d353}
+.oled-dot span{animation:od 1.2s ease-in-out infinite;opacity:0}
+.oled-dot span:nth-child(1){animation-delay:0s}
+.oled-dot span:nth-child(2){animation-delay:.25s}
+.oled-dot span:nth-child(3){animation-delay:.5s}
+@keyframes od{0%,100%{opacity:0}50%{opacity:1}}
+
+/* WiFi list mockup */
+.wf{background:var(--paper);border:1px solid var(--line);border-radius:10px;overflow:hidden;box-shadow:var(--shadow-lg)}
+.wf-hd{background:var(--paper-soft);padding:13px 18px;border-bottom:1px solid var(--line);font-size:13px;font-weight:600;display:flex;align-items:center;gap:8px;color:var(--ink-soft)}
+.wf-row{padding:13px 18px;border-bottom:1px solid var(--line-soft);display:flex;align-items:center;justify-content:space-between;font-size:13px}
+.wf-row:last-child{border-bottom:none}
+.wf-row.hi{background:rgba(26,59,45,.05)}
+.wf-name{font-weight:500}
+.wf-name.climas{color:var(--forest);font-weight:700}
+.wf-sub{font-size:11px;color:var(--safe);margin-top:2px}
+.wf-ck{width:18px;height:18px;border-radius:50%;background:var(--forest);display:flex;align-items:center;justify-content:center;color:var(--paper);font-size:10px;margin-left:8px}
+.bars{display:flex;align-items:flex-end;gap:2px}
+.bars span{display:block;width:3px;background:var(--ink-mute);border-radius:1px}
+.bars span:nth-child(1){height:5px}
+.bars span:nth-child(2){height:9px}
+.bars span:nth-child(3){height:13px}
+.bars.on span{background:var(--forest)}
+
+/* Phone mockup */
+.ph-wrap{display:flex;justify-content:center}
+.ph{width:210px;background:#1c1c1c;border-radius:26px;padding:9px;box-shadow:0 20px 56px rgba(0,0,0,.28),0 0 0 1px #2a2a2a}
+.ph-scr{background:#f4efe3;border-radius:18px;overflow:hidden;min-height:360px}
+.ph-nb{background:rgba(244,239,227,.96);border-bottom:1px solid #d6d0c2;padding:8px 12px;display:flex;align-items:center;justify-content:space-between}
+.ph-br{font-family:Georgia,serif;font-size:12px;display:flex;align-items:center;gap:6px}
+.ph-brd{width:6px;height:6px;border-radius:50%;background:#2a7a3c}
+.ph-badge{font-family:'Courier New',monospace;font-size:7px;letter-spacing:.1em;text-transform:uppercase;background:rgba(192,67,28,.1);border:1px solid rgba(192,67,28,.3);color:#c0431c;padding:2px 6px;border-radius:999px}
+.ph-body{padding:12px}
+.ph-sec{font-family:'Courier New',monospace;font-size:8px;letter-spacing:.14em;text-transform:uppercase;color:#c0431c;margin:10px 0 6px;display:flex;align-items:center;gap:6px}
+.ph-sec::after{content:'';flex:1;height:1px;background:#d6d0c2}
+.ph-sec:first-child{margin-top:0}
+.ph-lbl{font-family:'Courier New',monospace;font-size:8px;letter-spacing:.1em;text-transform:uppercase;color:#8a897e;margin-bottom:4px;margin-top:8px}
+.ph-lbl:first-of-type{margin-top:0}
+.ph-in{width:100%;background:#f4efe3;border:1px solid #d6d0c2;border-radius:4px;padding:6px 8px;font-size:11px;color:#1a1a18;font-family:system-ui,sans-serif}
+.ph-in.f{border-color:#1a3b2d}
+.ph-row{display:grid;grid-template-columns:1.4fr 1fr;gap:6px}
+.ph-btn{width:100%;background:#1a3b2d;color:#f4efe3;border:none;border-radius:4px;padding:9px;font-size:11px;font-weight:700;margin-top:10px;font-family:system-ui,sans-serif;letter-spacing:.03em}
+
+/* Live card */
+.live-c{background:var(--forest-deep);border-radius:8px;padding:24px;position:relative;overflow:hidden;color:var(--paper)}
+.live-c::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 20% 30%,rgba(217,164,65,.14),transparent 55%),radial-gradient(circle at 80% 70%,rgba(42,122,60,.14),transparent 50%)}
+.live-lbl{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:rgba(244,239,227,.45);margin-bottom:14px;position:relative;display:flex;align-items:center;gap:8px}
+.live-d{width:6px;height:6px;border-radius:50%;background:var(--safe);animation:pulse 2s infinite}
+.live-loc{font-family:'Fraunces',serif;font-size:15px;font-style:italic;color:rgba(244,239,227,.7);position:relative;margin-bottom:16px;min-height:22px}
+.live-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;position:relative}
+.live-m{background:rgba(244,239,227,.07);border:1px solid rgba(244,239,227,.1);border-radius:6px;padding:12px}
+.live-ml{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:rgba(244,239,227,.4);margin-bottom:6px}
+.live-mv{font-family:'Fraunces',serif;font-size:22px;font-weight:500;letter-spacing:-0.02em}
+.live-mv .u{font-size:12px;opacity:.6}
+.live-m.sf .live-mv{font-size:13px;font-family:'JetBrains Mono',monospace;font-weight:600;color:#39d353;letter-spacing:.06em}
+
+/* Worldwide */
+.ww-section{background:var(--forest-deep);padding:80px 32px;text-align:center;position:relative;overflow:hidden}
+.ww-section::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 25% 50%,rgba(217,164,65,.1),transparent 50%),radial-gradient(circle at 75% 50%,rgba(42,122,60,.1),transparent 50%)}
+.ww-inner{max-width:900px;margin:0 auto;position:relative}
+.ww-section .section-label{color:rgba(244,239,227,.4);justify-content:center;margin-bottom:20px}
+.ww-section .section-label::before{color:var(--amber)}
+.ww-h{font-family:'Fraunces',serif;font-weight:500;font-size:clamp(34px,4vw,52px);line-height:1.05;letter-spacing:-0.03em;color:var(--paper);margin-bottom:16px}
+.ww-h em{font-style:italic;color:var(--amber);font-weight:400}
+.ww-p{font-size:16px;color:rgba(244,239,227,.6);line-height:1.65;max-width:560px;margin:0 auto 40px}
+.cc-grid{display:flex;flex-wrap:wrap;justify-content:center;gap:10px}
+.cc-chip{display:flex;align-items:center;gap:8px;padding:10px 16px;background:rgba(244,239,227,.06);border:1px solid rgba(244,239,227,.12);border-radius:6px;transition:all .2s}
+.cc-chip:hover{background:rgba(244,239,227,.1);border-color:rgba(244,239,227,.22)}
+.cc-code{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;color:var(--amber);letter-spacing:.05em}
+.cc-name{font-size:13px;color:rgba(244,239,227,.7)}
+
+/* Responsive */
+@media(max-width:1100px){.step-card{grid-template-columns:64px 1fr}.step-right{display:none}}
+@media(max-width:760px){.stats-row{flex-direction:column}.stat-b{border-right:none;border-bottom:1px solid var(--line)}.stat-b:last-child{border-bottom:none}.steps-wrap{padding:0 20px 80px}.step-card{grid-template-columns:50px 1fr;gap:0 16px}.ww-section{padding:60px 20px}}
+@media(max-width:640px){.setup-hero{padding:48px 20px 48px}}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a class="brand" href="index.html"><span class="brand-mark"></span> CLIMAS</a>
+    <div class="nav-links">
+      <a href="preorder.html">Preorder</a>
+      <a href="setup.html" class="active">Setup</a>
+      <a href="about.html">About</a>
+    </div>
+    <div class="nav-cta">
+      <button class="cart-btn" id="cartOpenBtn">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        <span>Cart</span><span class="cart-count empty" id="cartCount">0</span>
+      </button>
+      <button class="btn-primary" id="authOpenBtn">Sign in</button>
+      <button class="nav-burger" id="navBurger" aria-label="Menu"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+  <a href="preorder.html" data-mm="1">Preorder <em>device</em></a>
+  <a href="setup.html" data-mm="1">Setup <em>guide</em></a>
+  <a href="about.html" data-mm="1">About</a>
+  <div class="mm-foot">
+    <div class="loc">Worldwide</div>
+    <div class="mm-btns">
+      <button id="mmCart">Cart <span id="mmCartCount">0</span></button>
+      <button class="primary" id="mmSignin">Sign in</button>
+    </div>
+  </div>
+</div>
+
+<!-- HERO -->
+<section class="setup-hero">
+  <div class="eyebrow-line">Setup guide</div>
+  <h1>Up and running<br/>in <em>three minutes.</em></h1>
+  <p class="hero-lede">No app to download. No account needed on the device. Power it on, connect your phone, fill in four fields and CLIMAS does the rest.</p>
+  <div class="stats-row">
+    <div class="stat-b"><span class="stat-v">~3</span><span class="stat-l">Minutes</span></div>
+    <div class="stat-b"><span class="stat-v">4</span><span class="stat-l">Fields to fill</span></div>
+    <div class="stat-b"><span class="stat-v">0</span><span class="stat-l">Apps needed</span></div>
+  </div>
+</section>
+
+<!-- STEPS -->
+<section class="steps-wrap">
+
+  <!-- 1 -->
+  <div class="step-card">
+    <div class="step-left">
+      <div class="step-circle">1</div>
+      <div class="step-tag-v">Power on</div>
+    </div>
+    <div class="step-mid">
+      <div class="step-kicker">First thing</div>
+      <h2 class="step-h">Plug it in. <em>Wait ten seconds.</em></h2>
+      <p class="step-p">Connect CLIMAS to any USB power source: a phone charger, a laptop port, or a power bank. The OLED screen runs through the startup animation, then shows <span class="tok">CLIMAS SETUP</span>.</p>
+      <p class="step-p">That screen means the device is ready and waiting. Nothing else to press at this stage.</p>
+    </div>
+    <div class="step-right">
+      <div class="oled">
+        <div class="oled-s">
+          <div class="oled-hd">&#9632; CLIMAS &#9632;</div>
+          <div class="oled-r" style="justify-content:center;color:#ccc;letter-spacing:.1em;font-size:11px;margin-bottom:8px">SETUP MODE</div>
+          <div class="oled-r"><span style="color:#555">Connect phone to:</span></div>
+          <div class="oled-r" style="margin-top:3px"><span class="gv" style="font-size:11px;letter-spacing:.04em">CLIMAS-Setup</span></div>
+          <div class="oled-r" style="margin-top:10px"><span style="color:#555">Waiting</span><span class="oled-dot"><span>.</span><span>.</span><span>.</span></span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2 -->
+  <div class="step-card">
+    <div class="step-left">
+      <div class="step-circle">2</div>
+      <div class="step-tag-v">Connect</div>
+    </div>
+    <div class="step-mid">
+      <div class="step-kicker">On your phone or laptop</div>
+      <h2 class="step-h">Open WiFi settings and join <em>CLIMAS-Setup.</em></h2>
+      <p class="step-p">Go to your phone's WiFi settings, the same place you connect to home or café networks. You'll see a network named <span class="tok g">CLIMAS-Setup</span>. Tap it. No password needed.</p>
+      <p class="step-p">This is a short-range network created by the device itself just for this step. It doesn't have internet access, that's normal and expected.</p>
+    </div>
+    <div class="step-right">
+      <div class="wf">
+        <div class="wf-hd">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12.55a11 11 0 0 1 14.08 0M1.42 9a16 16 0 0 1 21.16 0M8.53 16.11a6 6 0 0 1 6.95 0M12 20h.01"/></svg>
+          Wi-Fi
+        </div>
+        <div class="wf-row hi">
+          <div>
+            <div class="wf-name climas">CLIMAS-Setup</div>
+            <div class="wf-sub">Setup network &middot; No password</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:6px">
+            <div class="bars on"><span></span><span></span><span></span></div>
+            <div class="wf-ck">&#10003;</div>
+          </div>
+        </div>
+        <div class="wf-row">
+          <div><div class="wf-name">HomeNetwork_2.4G</div></div>
+          <div class="bars"><span></span><span></span><span style="opacity:.3"></span></div>
+        </div>
+        <div class="wf-row">
+          <div><div class="wf-name">TP-Link_Office</div></div>
+          <div class="bars"><span></span><span style="opacity:.3"></span><span style="opacity:.3"></span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3 -->
+  <div class="step-card">
+    <div class="step-left">
+      <div class="step-circle">3</div>
+      <div class="step-tag-v">Setup page</div>
+    </div>
+    <div class="step-mid">
+      <div class="step-kicker">Automatic</div>
+      <h2 class="step-h">A setup page opens <em>on its own.</em></h2>
+      <p class="step-p">Most phones detect the network and open a setup page automatically, the same way a hotel WiFi shows a login screen when you connect. You don't need to open a browser or type anything.</p>
+      <p class="step-p">If it doesn't appear after a few seconds, open any browser and go to <span class="tok">192.168.4.1</span>, the device's address during setup. The page loads immediately.</p>
+    </div>
+    <div class="step-right">
+      <div class="ph-wrap">
+        <div class="ph">
+          <div class="ph-scr">
+            <div class="ph-nb">
+              <div class="ph-br"><div class="ph-brd"></div>CLIMAS</div>
+              <div class="ph-badge">&#9679; Setup</div>
+            </div>
+            <div class="ph-body">
+              <div style="font-family:Georgia,serif;font-size:13px;font-weight:400;line-height:1.2;margin-bottom:12px;color:#1a1a18">Connect CLIMAS to<br/><em style="color:#1a3b2d">your network.</em></div>
+              <div class="ph-sec">WiFi</div>
+              <div class="ph-lbl">Network</div>
+              <input class="ph-in" type="text" placeholder="Select your network" readonly>
+              <div class="ph-lbl">Password</div>
+              <input class="ph-in" type="password" placeholder="WiFi password" readonly>
+              <div class="ph-sec">Location</div>
+              <div class="ph-row">
+                <div><div class="ph-lbl">City</div><input class="ph-in" placeholder="e.g. Accra" readonly></div>
+                <div><div class="ph-lbl">Country</div><input class="ph-in" placeholder="GH" readonly></div>
+              </div>
+              <button class="ph-btn">Save &amp; Connect &rarr;</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4 -->
+  <div class="step-card">
+    <div class="step-left">
+      <div class="step-circle">4</div>
+      <div class="step-tag-v">Your details</div>
+    </div>
+    <div class="step-mid">
+      <div class="step-kicker">Four fields</div>
+      <h2 class="step-h">Enter your WiFi and <em>your location.</em></h2>
+      <p class="step-p">The setup page has four fields. Your home WiFi name, selected from a dropdown of nearby networks. Your password. Your city name, typed exactly as you would in Google Maps. And your two-letter country code.</p>
+      <p class="step-p">The country code is just two letters: <span class="tok">GH</span> Ghana &nbsp; <span class="tok">NG</span> Nigeria &nbsp; <span class="tok">GB</span> UK &nbsp; <span class="tok">US</span> USA. The setup page has a row of tappable codes to make this easy, just tap yours and it fills in automatically.</p>
+      <p class="step-p">Tap <strong>Save &amp; Connect</strong>. The page confirms, the device restarts.</p>
+    </div>
+    <div class="step-right">
+      <div class="ph-wrap">
+        <div class="ph">
+          <div class="ph-scr">
+            <div class="ph-nb">
+              <div class="ph-br"><div class="ph-brd"></div>CLIMAS</div>
+              <div class="ph-badge">&#9679; Setup</div>
+            </div>
+            <div class="ph-body">
+              <div class="ph-sec">WiFi</div>
+              <div class="ph-lbl">Network</div>
+              <input class="ph-in f" value="HomeNetwork_2.4G" readonly>
+              <div class="ph-lbl">Password</div>
+              <input class="ph-in f" type="password" value="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;" readonly>
+              <div class="ph-sec">Location</div>
+              <div class="ph-row">
+                <div><div class="ph-lbl">City</div><input class="ph-in f" value="Accra" readonly></div>
+                <div><div class="ph-lbl">Country</div><input class="ph-in f" value="GH" readonly></div>
+              </div>
+              <button class="ph-btn">Save &amp; Connect &rarr;</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5 -->
+  <div class="step-card">
+    <div class="step-left">
+      <div class="step-circle">5</div>
+      <div class="step-tag-v">Live</div>
+    </div>
+    <div class="step-mid">
+      <div class="step-kicker">Done</div>
+      <h2 class="step-h">CLIMAS connects and <em>starts monitoring.</em></h2>
+      <p class="step-p">CLIMAS restarts, connects to your WiFi, and begins working immediately. Reconnect your phone to your normal network, you're done.</p>
+      <p class="step-p">The screen rotates every few seconds between three views: indoor temperature and humidity; outdoor weather for the city you entered; and the live gas reading. Every reading is specific to your location.</p>
+      <p class="step-p">To change your city or WiFi at any time, hold the button for three seconds. CLIMAS resets and goes back to step one.</p>
+    </div>
+    <div class="step-right">
+      <div class="live-c">
+        <div class="live-lbl"><div class="live-d"></div>Live, now monitoring</div>
+        <div class="live-loc" id="lCity">Accra, Ghana</div>
+        <div class="live-grid">
+          <div class="live-m"><div class="live-ml">Indoor temp</div><div class="live-mv" id="lT">28.4<span class="u"> °C</span></div></div>
+          <div class="live-m"><div class="live-ml">Humidity</div><div class="live-mv" id="lH">61<span class="u"> %</span></div></div>
+          <div class="live-m"><div class="live-ml">Outdoor · <span id="lCS">Accra</span></div><div class="live-mv" id="lW">32<span class="u"> °C</span></div></div>
+          <div class="live-m sf"><div class="live-ml">Gas (LPG)</div><div class="live-mv">SAFE</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<!-- WORLDWIDE -->
+<section class="ww-section">
+  <div class="ww-inner">
+    <div class="section-label" data-num="COVERAGE">Works worldwide</div>
+    <h2 class="ww-h">Kumasi. Lagos. <em>London.</em><br/>Wherever you are.</h2>
+    <p class="ww-p">CLIMAS ships without a fixed location. Enter your city during setup and the device calibrates to where you are. Change it any time by holding the button three seconds.</p>
+    <div class="cc-grid">
+      <div class="cc-chip"><span class="cc-code">GH</span><span class="cc-name">Ghana</span></div>
+      <div class="cc-chip"><span class="cc-code">NG</span><span class="cc-name">Nigeria</span></div>
+      <div class="cc-chip"><span class="cc-code">KE</span><span class="cc-name">Kenya</span></div>
+      <div class="cc-chip"><span class="cc-code">ZA</span><span class="cc-name">South Africa</span></div>
+      <div class="cc-chip"><span class="cc-code">ET</span><span class="cc-name">Ethiopia</span></div>
+      <div class="cc-chip"><span class="cc-code">GB</span><span class="cc-name">United Kingdom</span></div>
+      <div class="cc-chip"><span class="cc-code">DE</span><span class="cc-name">Germany</span></div>
+      <div class="cc-chip"><span class="cc-code">FR</span><span class="cc-name">France</span></div>
+      <div class="cc-chip"><span class="cc-code">US</span><span class="cc-name">United States</span></div>
+      <div class="cc-chip"><span class="cc-code">CA</span><span class="cc-name">Canada</span></div>
+      <div class="cc-chip"><span class="cc-code">AE</span><span class="cc-name">UAE</span></div>
+      <div class="cc-chip"><span class="cc-code">IN</span><span class="cc-name">India</span></div>
+      <div class="cc-chip"><span class="cc-code">AU</span><span class="cc-name">Australia</span></div>
+      <div class="cc-chip"><span class="cc-code">SG</span><span class="cc-name">Singapore</span></div>
+      <div class="cc-chip"><span class="cc-code">BR</span><span class="cc-name">Brazil</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="section" style="padding-top:100px">
+  <div class="section-label" data-num="FAQ">Common questions</div>
+  <h2 class="section-title">Answers before you <em>get started.</em></h2>
+  <div class="faq" id="faq" style="max-width:920px">
+    <div class="faq-item">
+      <button class="faq-q">The setup page didn't open automatically. What do I do? <span class="sign">+</span></button>
+      <div class="faq-a">Open any browser on your phone or laptop and type <strong>192.168.4.1</strong> into the address bar. This is the device's fixed address during setup. The page loads immediately. Make sure you're still connected to CLIMAS-Setup and your phone hasn't switched back to your home network.</div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q">Does it work on 5 GHz WiFi? <span class="sign">+</span></button>
+      <div class="faq-a">No, the hardware inside CLIMAS only supports 2.4 GHz. Most routers broadcast both frequencies. Look for a network ending in <strong>_2G</strong> or <strong>_2.4</strong>. If your router uses one name for both, try connecting anyway. Most routers will route the device to 2.4 GHz automatically.</div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q">What if my city name has special characters? <span class="sign">+</span></button>
+      <div class="faq-a">Type it in plain English without accent marks, <strong>Abidjan</strong> not Abidján, <strong>Sao Paulo</strong> not São Paulo. You can check that your city name works at openweathermap.org before setup. If the weather screen shows "Fetching…" indefinitely after connecting, the city name likely didn't match, hold the button three seconds to reset and try again.</div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q">I moved or changed my WiFi. How do I update it? <span class="sign">+</span></button>
+      <div class="faq-a">Hold the button on the device for three seconds. The screen shows a countdown. When it clears, CLIMAS restarts in setup mode, back to step one. The whole process takes under three minutes.</div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q">Will the gas sensor still work if my WiFi goes down? <span class="sign">+</span></button>
+      <div class="faq-a">Yes, completely. The gas sensor, buzzer, LED, and danger display all run independently of your internet connection. If your WiFi drops, CLIMAS keeps sensing and alarming if needed, and retries the connection every five seconds in the background. The only feature that needs WiFi is the outdoor weather feed.</div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q">Do I need an account to use the device? <span class="sign">+</span></button>
+      <div class="faq-a">No. Gas sensing, temperature, humidity, the alarm, and the OLED display all work without any account. An account and subscription is only required for the live online dashboard, the Pro plan feature. All local safety features work fully offline.</div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-band">
+  <div class="cta-band-inner">
+    <h2>Don't have one yet?<br/><em>Three minutes</em> from now you could.</h2>
+    <p>Free device. Choose a plan. Assembled in Ghana, shipped within 5 days. Works wherever you are.</p>
+    <a class="btn-hero" href="preorder.html">Preorder CLIMAS <span class="arrow">&rarr;</span></a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div><div class="footer-brand">CLIMAS</div><p class="footer-tag">Climate + gas. A proactive indoor safety system assembled in Ghana. Protecting homes, offices, dorms, and any indoor space, anywhere in the world.</p></div>
+    <div class="footer-col"><h5>Product</h5><a href="preorder.html">Preorder device</a><a href="setup.html">Setup guide</a><a href="about.html">About</a><a href="about.html#contact">Contact</a></div>
+    <div class="footer-col"><h5>Account</h5><a href="#" data-open-auth="signin">Sign in</a><a href="#" data-open-auth="signup">Create account</a></div>
+    <div class="footer-col"><h5>Reach us</h5><a href="mailto:hello@climas.live">hello@climas.live</a><a href="tel:+233200000000">+233 (0) 20 000 0000</a><a href="about.html#contact">Ghana</a></div>
+  </div>
+  <div class="footer-bottom"><span>&copy; 2026 Climas Systems &middot; Assembled in Ghana</span><span>Non-blocking firmware</span></div>
+</footer>
+
+<!-- AUTH + CART (shared) -->
+<div class="auth-modal" id="authModal">
+  <div class="auth-header"><div class="auth-tabs"><button class="auth-tab active" data-auth-tab="signin">Sign in</button><button class="auth-tab" data-auth-tab="signup">Create account</button></div></div>
+  <div class="auth-body">
+    <h2 class="auth-title" id="authTitle">Welcome back.</h2>
+    <p class="auth-sub" id="authSub">Sign in to choose a plan and activate your device.</p>
+    <div class="form-field" id="nameField" style="display:none"><label>Full name</label><input type="text" placeholder="Your name" id="nameInput"/></div>
+    <div class="form-field"><label>Email</label><input type="email" placeholder="you@climas.live" id="emailInput"/></div>
+    <div class="form-field"><label>Password</label><input type="password" placeholder="••••••••" id="passInput"/></div>
+    <button class="auth-submit" id="authSubmitBtn">Sign in</button>
+    <div class="auth-alt"><span id="authAltText">New to CLIMAS? </span><a id="authAltLink">Create an account</a></div>
+  </div>
+</div>
+<div class="overlay" id="overlay"></div>
+<div class="cart-drawer" id="cartDrawer">
+  <div class="cart-header"><h3>Your cart</h3><button class="cart-close" id="cartCloseBtn">&times;</button></div>
+  <div class="cart-body" id="cartBody"></div>
+  <div class="cart-footer" id="cartFooter" style="display:none">
+    <div class="cart-subtotal"><span>Billed today</span><span class="cart-subtotal-amt" id="cartSubtotal">&#8373;0.00</span></div>
+    <div class="cart-note">Device is free. Subscription billed monthly.</div>
+    <button class="cart-checkout-btn" id="checkoutBtn">Checkout</button>
+  </div>
+</div>
+
+<script src="app.js"></script>
+<script>
+(function(){
+  var cities=[
+    {c:'Accra, Ghana',s:'Accra',wx:32,t:28.4,h:61},
+    {c:'Lagos, Nigeria',s:'Lagos',wx:33,t:29.1,h:74},
+    {c:'Kumasi, Ghana',s:'Kumasi',wx:29,t:27.6,h:68},
+    {c:'Nairobi, Kenya',s:'Nairobi',wx:22,t:24.2,h:55},
+    {c:'London, UK',s:'London',wx:14,t:20.8,h:48},
+    {c:'Dubai, UAE',s:'Dubai',wx:39,t:25.0,h:42},
+    {c:'New York, US',s:'New York',wx:18,t:21.3,h:50},
+    {c:'Abuja, Nigeria',s:'Abuja',wx:34,t:28.9,h:62}
+  ];
+  var i=0,t=cities[0].t,h=cities[0].h,wx=cities[0].wx;
+  function set(x){
+    var lC=document.getElementById('lCity');
+    var lCS=document.getElementById('lCS');
+    var lW=document.getElementById('lW');
+    if(lC)lC.textContent=x.c;
+    if(lCS)lCS.textContent=x.s;
+    wx=x.wx+(Math.random()-.5)*1.5;
+    if(lW)lW.innerHTML=Math.round(wx)+'<span class="u"> &deg;C</span>';
+    t=x.t;h=x.h;
+  }
+  function tick(){
+    t+=(Math.random()-.5)*.3;h+=(Math.random()-.5)*.8;
+    t=Math.max(15,Math.min(40,t));h=Math.max(30,Math.min(85,h));
+    var lT=document.getElementById('lT');
+    var lH=document.getElementById('lH');
+    if(lT)lT.innerHTML=t.toFixed(1)+'<span class="u"> &deg;C</span>';
+    if(lH)lH.innerHTML=Math.round(h)+'<span class="u"> %</span>';
+  }
+  set(cities[0]);
+  setInterval(tick,1800);
+  setInterval(function(){i=(i+1)%cities.length;set(cities[i]);},3500);
+})();
+</script>
+</body>
+</html>

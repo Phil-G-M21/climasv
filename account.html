@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Account — CLIMAS</title>
+<link rel="stylesheet" href="styles.css" />
+<style>
+.account-wrap{max-width:860px;margin:0 auto;padding:60px 32px 120px}
+.account-greeting{margin-bottom:48px;padding-bottom:32px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:16px}
+.account-greeting h1{font-family:'Fraunces',serif;font-weight:500;font-size:clamp(32px,4vw,46px);letter-spacing:-0.03em;line-height:1.05}
+.account-greeting h1 em{font-style:italic;color:var(--forest)}
+.account-greeting-meta{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--ink-mute);letter-spacing:.08em;text-align:right}
+.signout-btn{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--clay);border:1px solid rgba(192,67,28,.25);border-radius:4px;padding:6px 14px;background:none;cursor:pointer;margin-top:8px;display:block;transition:all .15s}
+.signout-btn:hover{background:rgba(192,67,28,.06)}
+.acc-section{margin-bottom:20px;border:1px solid var(--line);border-radius:6px;overflow:hidden}
+.acc-section-head{padding:20px 28px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;background:var(--paper-soft)}
+.acc-section-title{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-mute)}
+.acc-section-body{padding:28px;background:var(--paper)}
+.order-ref{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--ink-mute);letter-spacing:.06em}
+.timeline{display:flex;flex-direction:column;position:relative}
+.timeline::before{content:'';position:absolute;left:15px;top:8px;bottom:8px;width:2px;background:var(--line)}
+.tl-step{display:flex;gap:20px;align-items:flex-start;position:relative;padding-bottom:24px}
+.tl-step:last-child{padding-bottom:0}
+.tl-dot{width:32px;height:32px;border-radius:50%;border:2px solid var(--line);background:var(--paper);display:flex;align-items:center;justify-content:center;flex-shrink:0;position:relative;z-index:1;font-size:13px}
+.tl-step.done .tl-dot{background:var(--safe);border-color:var(--safe);color:var(--paper)}
+.tl-step.active .tl-dot{background:var(--amber);border-color:var(--amber);color:var(--ink);box-shadow:0 0 0 4px rgba(217,164,65,.18)}
+.tl-step.pending .tl-dot{color:var(--line)}
+.tl-info{padding-top:6px}
+.tl-label{font-weight:600;font-size:14px;margin-bottom:3px}
+.tl-step.pending .tl-label{color:var(--ink-mute)}
+.tl-sub{font-size:12px;color:var(--ink-mute);font-family:'JetBrains Mono',monospace}
+.tl-step.active .tl-sub{color:var(--clay);font-weight:600}
+.sub-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px;margin-bottom:24px}
+.sub-field strong{display:block;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-mute);margin-bottom:6px}
+.sub-field span{font-size:15px;font-weight:500}
+.plan-pill{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;letter-spacing:.1em;padding:4px 12px;border-radius:999px}
+.plan-pill.pro{background:var(--forest);color:var(--paper)}
+.plan-pill.basic{background:var(--paper-soft);color:var(--ink);border:1px solid var(--line)}
+.sub-actions{display:flex;gap:12px;flex-wrap:wrap}
+.btn-small{padding:10px 20px;border:1px solid var(--line);border-radius:4px;font-size:13px;font-weight:500;background:none;cursor:pointer;transition:all .15s;color:var(--ink);text-decoration:none;display:inline-block}
+.btn-small:hover{border-color:var(--ink);background:var(--paper-soft)}
+.btn-small.primary{background:var(--forest);color:var(--paper);border-color:var(--forest)}
+.btn-small.primary:hover{background:var(--forest-deep)}
+.device-row{display:flex;align-items:center;gap:16px;margin-bottom:20px}
+.device-icon{width:48px;height:48px;border:1px solid var(--line);border-radius:6px;display:flex;align-items:center;justify-content:center;background:var(--paper-soft);flex-shrink:0}
+.device-name{font-weight:600;font-size:15px;margin-bottom:3px}
+.device-tag{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--ink-mute);letter-spacing:.06em}
+.dot-inline{display:inline-block;width:6px;height:6px;border-radius:50%;margin-right:6px;vertical-align:middle}
+.dash-cta{background:var(--forest-deep);border-radius:6px;padding:28px 32px;display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap;position:relative;overflow:hidden;margin-top:20px}
+.dash-cta::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 80% 50%,rgba(217,164,65,.15),transparent 60%)}
+.dash-cta-copy{position:relative}
+.dash-cta-copy h3{font-family:'Fraunces',serif;font-weight:500;font-size:22px;color:var(--paper);margin-bottom:6px}
+.dash-cta-copy h3 em{font-style:italic;color:var(--amber)}
+.dash-cta-copy p{font-size:13px;color:rgba(244,239,227,.6);max-width:360px}
+.dash-cta .btn-hero{position:relative;background:var(--amber);color:var(--ink);white-space:nowrap;flex-shrink:0}
+.dash-cta .btn-hero:hover{background:var(--paper)}
+.upgrade-banner{background:var(--paper-soft);border:1px solid var(--line);border-left:3px solid var(--clay);border-radius:6px;padding:20px 24px;display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;margin-top:20px}
+.upgrade-banner p{font-size:14px;color:var(--ink-soft);max-width:480px}
+.acc-gate{max-width:520px;margin:100px auto;text-align:center;padding:40px 32px}
+.acc-gate h2{font-family:'Fraunces',serif;font-weight:500;font-size:32px;letter-spacing:-0.02em;margin-bottom:14px}
+.acc-gate h2 em{font-style:italic;color:var(--forest)}
+.acc-gate p{font-size:15px;color:var(--ink-soft);line-height:1.65;margin-bottom:28px}
+.acc-gate-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.acc-empty{text-align:center;padding:48px 24px}
+.acc-empty h3{font-family:'Fraunces',serif;font-size:22px;font-weight:500;margin-bottom:10px}
+.acc-empty p{font-size:14px;color:var(--ink-soft);margin-bottom:24px;max-width:360px;margin-left:auto;margin-right:auto;line-height:1.6}
+@media(max-width:640px){
+  .account-wrap{padding:40px 20px 80px}
+  .acc-section-body{padding:20px}
+  .acc-section-head{padding:16px 20px}
+  .sub-row{grid-template-columns:1fr 1fr}
+  .dash-cta{padding:22px 20px}
+  .account-greeting{align-items:flex-start;flex-direction:column}
+  .account-greeting-meta{text-align:left}
+}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a class="brand" href="index.html"><span class="brand-mark"></span> CLIMAS</a>
+    <div class="nav-links">
+      <a href="preorder.html">Preorder</a>
+      <a href="setup.html">Setup</a>
+      <a href="about.html">About</a>
+    </div>
+    <div class="nav-cta">
+      <button class="btn-primary" id="authOpenBtn">Sign in</button>
+      <button class="nav-burger" id="navBurger" aria-label="Menu"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+  <a href="preorder.html" data-mm="1">Preorder <em>device</em></a>
+  <a href="setup.html" data-mm="1">Setup <em>guide</em></a>
+  <a href="about.html" data-mm="1">About</a>
+  <a href="account.html" data-mm="1" class="active">Account</a>
+  <div class="mm-foot">
+    <div class="loc">Ghana</div>
+    <div class="mm-btns">
+      <button class="primary" id="mmSignin">Sign in</button>
+    </div>
+  </div>
+</div>
+
+<!-- NOT SIGNED IN -->
+<div id="view-gate" style="display:none">
+  <div class="acc-gate">
+    <h2>Your <em>account.</em></h2>
+    <p>Sign in to view your order status, manage your subscription, and access your dashboard once your device is active.</p>
+    <div class="acc-gate-btns">
+      <button class="btn-hero" id="gateSigninBtn">Sign in <span class="arrow">→</span></button>
+      <a class="btn-ghost" href="preorder.html">Preorder a device</a>
+    </div>
+  </div>
+</div>
+
+<!-- SIGNED IN — NO ORDER -->
+<div id="view-noorder" style="display:none">
+  <div class="account-wrap">
+    <div class="account-greeting">
+      <div><h1>Hello, <em id="nameNoOrder">there</em>.</h1></div>
+      <div class="account-greeting-meta">
+        <div id="emailNoOrder" style="margin-bottom:6px"></div>
+        <button class="signout-btn" id="signout1">Sign out</button>
+      </div>
+    </div>
+    <div class="acc-section">
+      <div class="acc-section-head"><span class="acc-section-title">Orders</span></div>
+      <div class="acc-section-body">
+        <div class="acc-empty">
+          <h3>No orders yet.</h3>
+          <p>You haven't preordered a CLIMAS device. Pick a plan and we'll build yours within 5 days.</p>
+          <a class="btn-hero" href="preorder.html">Preorder CLIMAS <span class="arrow">→</span></a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SIGNED IN — HAS ORDER -->
+<div id="view-account" style="display:none">
+  <div class="account-wrap">
+    <div class="account-greeting">
+      <div><h1>Hello, <em id="accountName">there</em>.</h1></div>
+      <div class="account-greeting-meta">
+        <div id="accountEmail" style="margin-bottom:6px"></div>
+        <button class="signout-btn" id="signout2">Sign out</button>
+      </div>
+    </div>
+
+    <!-- ORDER -->
+    <div class="acc-section">
+      <div class="acc-section-head">
+        <span class="acc-section-title">Order status</span>
+        <span class="order-ref" id="orderRef"></span>
+      </div>
+      <div class="acc-section-body">
+        <div class="timeline">
+          <div class="tl-step done">
+            <div class="tl-dot">✓</div>
+            <div class="tl-info">
+              <div class="tl-label">Order confirmed</div>
+              <div class="tl-sub" id="orderDate"></div>
+            </div>
+          </div>
+          <div class="tl-step active">
+            <div class="tl-dot">◉</div>
+            <div class="tl-info">
+              <div class="tl-label">In assembly</div>
+              <div class="tl-sub">Being hand-built in Ghana · Est. 5 business days</div>
+            </div>
+          </div>
+          <div class="tl-step pending">
+            <div class="tl-dot">○</div>
+            <div class="tl-info">
+              <div class="tl-label">Shipped</div>
+              <div class="tl-sub">Awaiting dispatch</div>
+            </div>
+          </div>
+          <div class="tl-step pending">
+            <div class="tl-dot">○</div>
+            <div class="tl-info">
+              <div class="tl-label">Delivered</div>
+              <div class="tl-sub">Awaiting delivery</div>
+            </div>
+          </div>
+          <div class="tl-step pending">
+            <div class="tl-dot">○</div>
+            <div class="tl-info">
+              <div class="tl-label">Device active</div>
+              <div class="tl-sub">Complete setup to activate cloud features</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SUBSCRIPTION -->
+    <div class="acc-section">
+      <div class="acc-section-head"><span class="acc-section-title">Subscription</span></div>
+      <div class="acc-section-body">
+        <div class="sub-row">
+          <div class="sub-field"><strong>Plan</strong><span id="planBadge"></span></div>
+          <div class="sub-field"><strong>Billed</strong><span id="planPrice"></span></div>
+          <div class="sub-field"><strong>Status</strong><span style="color:var(--safe);font-weight:600">Active</span></div>
+        </div>
+        <div class="sub-actions" id="subActions"></div>
+      </div>
+    </div>
+
+    <!-- DEVICE -->
+    <div class="acc-section">
+      <div class="acc-section-head"><span class="acc-section-title">Device</span></div>
+      <div class="acc-section-body">
+        <div class="device-row">
+          <div class="device-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+          </div>
+          <div>
+            <div class="device-name">CLIMAS — Indoor Monitor</div>
+            <div class="device-tag"><span class="dot-inline" style="background:var(--amber)"></span>Awaiting setup · Not yet connected</div>
+          </div>
+        </div>
+        <p style="font-size:13px;color:var(--ink-mute);line-height:1.6;margin-bottom:16px">Once your device arrives, power it on and connect to the <strong style="color:var(--ink);font-family:'JetBrains Mono',monospace;font-size:12px">CLIMAS-Setup</strong> WiFi network to complete setup.</p>
+        <a class="btn-small" href="setup.html">View setup guide →</a>
+      </div>
+    </div>
+
+    <!-- DASHBOARD — Pro only -->
+    <div id="dashCta" style="display:none">
+      <div class="dash-cta">
+        <div class="dash-cta-copy">
+          <h3>Your live <em>dashboard.</em></h3>
+          <p>Once your device is online, all readings stream here in real time.</p>
+        </div>
+        <a class="btn-hero" href="dashboard.html">Open dashboard <span class="arrow">→</span></a>
+      </div>
+    </div>
+
+    <!-- UPGRADE — Basic only -->
+    <div id="upgradeBanner" style="display:none">
+      <div class="upgrade-banner">
+        <p><strong>Want phone call alerts and the live dashboard?</strong> Upgrade to Pro for ₵28/month and unlock emergency phone calls, real-time web readings, and full alert history.</p>
+        <a class="btn-small primary" href="preorder.html">Upgrade to Pro</a>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div><div class="footer-brand">CLIMAS</div><p class="footer-tag">Climate + gas. Assembled in Ghana. Protecting homes and indoor spaces.</p></div>
+    <div class="footer-col"><h5>Product</h5><a href="preorder.html">Preorder device</a><a href="setup.html">Setup guide</a><a href="about.html">About</a></div>
+    <div class="footer-col"><h5>Account</h5><a href="account.html">My account</a><a href="#" data-open-auth="signin">Sign in</a></div>
+    <div class="footer-col"><h5>Reach us</h5><a href="mailto:hello@climas.live">hello@climas.live</a><a href="tel:+233200000000">+233 (0) 20 000 0000</a></div>
+  </div>
+  <div class="footer-bottom"><span>© 2026 Climas Systems · Assembled in Ghana</span><span>Non-blocking firmware</span></div>
+</footer>
+
+<!-- AUTH MODAL -->
+<div class="auth-modal" id="authModal">
+  <div class="auth-header"><div class="auth-tabs"><button class="auth-tab active" data-auth-tab="signin">Sign in</button><button class="auth-tab" data-auth-tab="signup">Create account</button></div></div>
+  <div class="auth-body">
+    <h2 class="auth-title" id="authTitle">Welcome back.</h2>
+    <p class="auth-sub" id="authSub">Sign in to manage your device and subscription.</p>
+    <div class="form-field" id="nameField" style="display:none"><label>Full name</label><input type="text" placeholder="Your name" id="nameInput" /></div>
+    <div class="form-field"><label>Email</label><input type="email" placeholder="you@climas.live" id="emailInput" /></div>
+    <div class="form-field"><label>Password</label><input type="password" placeholder="••••••••" id="passInput" /></div>
+    <button class="auth-submit" id="authSubmitBtn">Sign in</button>
+    <div class="auth-alt"><span id="authAltText">New to CLIMAS? </span><a id="authAltLink">Create an account</a></div>
+  </div>
+</div>
+<div class="overlay" id="overlay"></div>
+
+<script src="app.js"></script>
+<script>
+(function(){
+  const signedIn   = sessionStorage.getItem('climas_signedin');
+  const user       = sessionStorage.getItem('climas_user') || 'there';
+  const email      = sessionStorage.getItem('climas_email') || '';
+  const subscribed = sessionStorage.getItem('climas_subscribed');
+  const plan       = sessionStorage.getItem('climas_plan') || 'basic';
+
+  const authBtn = document.getElementById('authOpenBtn');
+  if (authBtn && signedIn) authBtn.textContent = user;
+
+  function show(id){
+    ['view-gate','view-noorder','view-account'].forEach(v=>{
+      const el=document.getElementById(v);
+      if(el) el.style.display = v===id ? 'block' : 'none';
+    });
+  }
+
+  if(!signedIn){
+    show('view-gate');
+    document.getElementById('gateSigninBtn').addEventListener('click',()=>{
+      document.getElementById('authOpenBtn').click();
+    });
+    // after sign-in app.js will redirect to account.html — reload to show correct state
+    const orig = document.getElementById('authSubmitBtn');
+    if(orig) orig.addEventListener('click',()=>setTimeout(()=>window.location.reload(),100),{capture:true});
+    return;
+  }
+
+  if(!subscribed){
+    show('view-noorder');
+    document.getElementById('nameNoOrder').textContent = user;
+    if(email) document.getElementById('emailNoOrder').textContent = email;
+    const s1 = document.getElementById('signout1');
+    if(s1) s1.addEventListener('click', doSignout);
+    return;
+  }
+
+  show('view-account');
+  document.getElementById('accountName').textContent = user;
+  if(email) document.getElementById('accountEmail').textContent = email;
+
+  // Generate + persist order ref
+  let ref = sessionStorage.getItem('climas_order_ref');
+  if(!ref){ ref = 'CLM-' + Math.random().toString(36).slice(2,8).toUpperCase(); sessionStorage.setItem('climas_order_ref',ref); }
+  document.getElementById('orderRef').textContent = ref;
+
+  let date = sessionStorage.getItem('climas_order_date');
+  if(!date){ date = new Date().toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}); sessionStorage.setItem('climas_order_date',date); }
+  document.getElementById('orderDate').textContent = date;
+
+  // Plan
+  const isPro = plan === 'pro';
+  document.getElementById('planBadge').innerHTML = `<span class="plan-pill ${plan}">${isPro?'Pro':'Basic'}</span>`;
+  document.getElementById('planPrice').textContent = isPro ? '₵28 / month' : '₵18 / month';
+  document.getElementById('subActions').innerHTML = isPro
+    ? `<button class="btn-small">Change plan</button><button class="btn-small" style="color:var(--clay);border-color:rgba(192,67,28,.25)">Cancel subscription</button>`
+    : `<a class="btn-small primary" href="preorder.html">Upgrade to Pro</a><button class="btn-small" style="color:var(--clay);border-color:rgba(192,67,28,.25)">Cancel subscription</button>`;
+
+  if(isPro) document.getElementById('dashCta').style.display='block';
+  else document.getElementById('upgradeBanner').style.display='block';
+
+  ['signout1','signout2'].forEach(id=>{
+    const b=document.getElementById(id);
+    if(b) b.addEventListener('click',doSignout);
+  });
+
+  function doSignout(){
+    ['climas_signedin','climas_user','climas_email','climas_plan','climas_subscribed','climas_order_ref','climas_order_date'].forEach(k=>sessionStorage.removeItem(k));
+    window.location.href='index.html';
+  }
+})();
+</script>
+</body>
+</html>
